@@ -15,7 +15,7 @@ class UserController(ApiController):
         return 'user'
 
     @get()
-    async def get_item(self, user_id: FromQuery[UUID]) -> RespUser:
+    async def get_user(self, user_id: FromQuery[UUID]) -> RespUser:
         user = await db.get_user(user_id.value)
         return RespUser(
             uuid=user.get('uuid'),
@@ -26,7 +26,7 @@ class UserController(ApiController):
         )
 
     @post()
-    async def post_item(self, response: FromJson[User]) -> RespUser:
+    async def post_user(self, response: FromJson[User]) -> RespUser:
         user_id = await db.add_user(response.value)
         user = await db.get_user(user_id)
         return RespUser(
@@ -38,7 +38,7 @@ class UserController(ApiController):
         )
 
     @put()
-    async def put_item(self, response: FromJson[User], user_id: FromQuery[UUID]) -> RespUser:
+    async def put_user(self, response: FromJson[User], user_id: FromQuery[UUID]) -> RespUser:
         user_id = await db.update_user(response.value, user_id.value)
         user = await db.get_user(user_id)
         return RespUser(
@@ -50,6 +50,6 @@ class UserController(ApiController):
         )
 
     @delete()
-    async def delete_item(self, user_id: FromQuery[UUID]) -> dict:
+    async def delete_user(self, user_id: FromQuery[UUID]) -> dict:
         user_id = await db.delete_user(user_id.value)
         return {'result': 'successful', 'detail': f'User with UUID={user_id} deleted'}

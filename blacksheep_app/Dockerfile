@@ -2,7 +2,7 @@ FROM python:3.11.3-bullseye
 
 EXPOSE 8000
 
-WORKDIR /usr/src/blacksheep
+WORKDIR /usr/src/app
 
 RUN apt update && \
     apt upgrade -y && \

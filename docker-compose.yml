@@ -1,14 +1,28 @@
 services:
     blacksheep:
         container_name: blacksheep
-        build: ./blacksheep/
+        build: ./blacksheep_app/
         restart: on-failure
         env_file:
-            - ./blacksheep/.env
+            - ./blacksheep_app/.env
         environment:
             "POSTGRES_HOST": postgres
         ports:
             - "8000:8000"
+        depends_on:
+            postgres:
+                condition: service_healthy
+
+    litestar:
+        container_name: litestar
+        build: ./litestar_app/
+        restart: on-failure
+        env_file:
+            - ./litestar_app/.env
+        environment:
+            "POSTGRES_HOST": postgres
+        ports:
+            - "5000:5000"
         depends_on:
             postgres:
                 condition: service_healthy
