@@ -28,16 +28,17 @@ class PostgresDB:
         if not self.pool:
             await self.create_pool()
         user = await self.pool.fetchrow('SELECT * FROM users WHERE uuid = $1', user_id)
-        return user
+        return user or None
 
     async def add_user(self, user: User):
         if not self.pool:
             await self.create_pool()
         async with self.pool.acquire() as conn:
-            user_id = await conn.fetchval(
+            uuid = await conn.fetchval(
                 'INSERT INTO users(full_name, phone) VALUES($1, $2) RETURNING uuid', user.full_name, user.phone
             )
-        return user_id
+            user = await self.get_user(uuid)
+        return user or None
 
     async def update_user(self, user: User, user_id: UUID4):
         if not self.pool:
@@ -50,11 +51,16 @@ class PostgresDB:
                 datetime.now(),
                 user_id,
             )
-        return uuid
+            user = await self.get_user(uuid)
+        return user or None
 
     async def delete_user(self, user_id: UUID4):
         if not self.pool:
             await self.create_pool()
         async with self.pool.acquire() as conn:
             user_id = await conn.fetchval('DELETE FROM users WHERE uuid = $1 RETURNING uuid', user_id)
-        return user_id
+        return user_id or None
+
+
+async def provides_postgres() -> PostgresDB:
+    return PostgresDB()
