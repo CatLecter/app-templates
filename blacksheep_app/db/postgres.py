@@ -4,6 +4,7 @@ from uuid import UUID
 
 import asyncpg
 from dotenv import load_dotenv
+
 from schemes.users import User
 
 load_dotenv(dotenv_path='./.env')
@@ -20,27 +21,25 @@ class PostgresDB:
         }
         self.pool = None
 
-    async def create_pool(self):
-        self.pool = await asyncpg.create_pool(**self.dsn, min_size=2, max_size=4)
-
-    async def get_user(self, user_id: UUID):
+    async def create_pool(self, min_size: int = 2, max_size: int = 4) -> None:
         if not self.pool:
-            await self.create_pool()
+            self.pool = await asyncpg.create_pool(**self.dsn, min_size=min_size, max_size=max_size)
+
+    async def get_user(self, user_id: UUID) -> dict | None:
+        await self.create_pool()
         user = await self.pool.fetchrow('SELECT * FROM users WHERE uuid = $1', user_id)
-        return user
+        return user or None
 
-    async def add_user(self, user: User):
-        if not self.pool:
-            await self.create_pool()
+    async def add_user(self, user: User) -> dict | None:
+        await self.create_pool()
         async with self.pool.acquire() as conn:
-            user_id = await conn.fetchval(
+            uuid = await conn.fetchval(
                 'INSERT INTO users(full_name, phone) VALUES($1, $2) RETURNING uuid', user.full_name, user.phone
             )
-        return user_id
+        return await self.get_user(uuid) if uuid else None
 
-    async def update_user(self, user: User, user_id: UUID):
-        if not self.pool:
-            await self.create_pool()
+    async def update_user(self, user: User, user_id: UUID) -> dict | None:
+        await self.create_pool()
         async with self.pool.acquire() as conn:
             uuid = await conn.fetchval(
                 'UPDATE users SET full_name = $1, phone = $2, updated_at = $3 WHERE uuid = $4 RETURNING uuid',
@@ -49,11 +48,10 @@ class PostgresDB:
                 datetime.now(),
                 user_id,
             )
-        return uuid
+        return await self.get_user(uuid) if uuid else None
 
-    async def delete_user(self, user_id: UUID):
-        if not self.pool:
-            await self.create_pool()
+    async def delete_user(self, user_id: UUID) -> str | None:
+        await self.create_pool()
         async with self.pool.acquire() as conn:
-            user_id = await conn.fetchval('DELETE FROM users WHERE uuid = $1 RETURNING uuid', user_id)
-        return user_id
+            delete_user_id = await conn.fetchval('DELETE FROM users WHERE uuid = $1 RETURNING uuid', user_id)
+        return delete_user_id or None

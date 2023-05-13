@@ -1,3 +1,3 @@
-from schemes.users import User, ResponseUser
+from schemes.users import ResponseUser, User
 
 __all__ = ['User', 'ResponseUser']
