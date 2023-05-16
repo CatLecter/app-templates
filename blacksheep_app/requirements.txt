@@ -1,4 +1,4 @@
-asyncpg==0.27.0
 blacksheep==1.2.14
+psycopg2-binary==2.9.6
 python-dotenv==1.0.0
 uvicorn==0.22.0

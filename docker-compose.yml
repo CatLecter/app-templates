@@ -1,49 +1,69 @@
 services:
-    blacksheep:
-        container_name: blacksheep
-        build: ./blacksheep_app/
-        restart: on-failure
-        env_file:
-            - ./blacksheep_app/.env
-        environment:
-            "POSTGRES_HOST": postgres
-        ports:
-            - "8000:8000"
-        depends_on:
-            postgres:
-                condition: service_healthy
+  blacksheep:
+    container_name: blacksheep
+    build: ./blacksheep_app/
+    restart: on-failure
+    env_file:
+      - ./blacksheep_app/.env
+    environment:
+      "POSTGRES_HOST": postgres
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-    litestar:
-        container_name: litestar
-        build: ./litestar_app/
-        restart: on-failure
-        env_file:
-            - ./litestar_app/.env
-        environment:
-            "POSTGRES_HOST": postgres
-        ports:
-            - "5000:5000"
-        depends_on:
-            postgres:
-                condition: service_healthy
+  litestar:
+    container_name: litestar
+    build: ./litestar_app/
+    restart: on-failure
+    env_file:
+      - ./litestar_app/.env
+    environment:
+      "POSTGRES_HOST": postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-    postgres:
-        container_name: postgres
-        image: postgres:15.2-bullseye
-        env_file:
-            - ./db/.env
-        ports:
-            - "5432:5432"
-        volumes:
-            - postgres:/var/lib/postgresql/data
-            - ./db/sql_scripts:/docker-entrypoint-initdb.d
-        healthcheck:
-            test: [ "CMD-SHELL", "pg_isready -U user -d db" ]
-            interval: 10s
-            timeout: 5s
-            retries: 5
-            start_period: 10s
-        restart: unless-stopped
+  muffin:
+    container_name: muffin
+    build: ./muffin_app/
+    restart: on-failure
+    env_file:
+      - ./muffin_app/.env
+    environment:
+      "POSTGRES_HOST": postgres
+    ports:
+      - "6000:6000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    container_name: postgres
+    image: postgres:15.3-bullseye
+    env_file:
+      - ./db/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./db/sql_scripts:/docker-entrypoint-initdb.d
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
 
 volumes:
-    postgres:
+  postgres:
