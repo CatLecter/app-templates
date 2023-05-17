@@ -12,13 +12,11 @@ class Settings:
     pg_password: str = getenv('POSTGRES_PASSWORD', 'password')
     pg_host: str = getenv('POSTGRES_HOST', '127.0.0.1')
     pg_port: int = getenv('POSTGRES_PORT', 5432)
-    pg_db: str = getenv(
-        'POSTGRES_DB',
-    )
-    app_host: str = getenv('APP_HOST')
-    app_port: int = getenv('APP_PORT')
-    reload: bool = getenv('RELOAD')
-    log_level: str = getenv('LOG_LEVEL')
+    pg_db: str = getenv('POSTGRES_DB', 'db')
+    app_host: str = getenv('APP_HOST', '127.0.0.1')
+    app_port: int = getenv('APP_PORT', 8000)
+    reload: bool = getenv('RELOAD', True)
+    log_level: str = getenv('LOG_LEVEL', 'debug')
 
 
 settings = Settings()
