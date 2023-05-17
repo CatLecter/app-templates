@@ -2,8 +2,15 @@ import uvicorn
 from litestar import Litestar
 
 from controllers import routes
+from settings import settings
 
 app = Litestar(route_handlers=[*routes])
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host='127.0.0.1', port=5000, log_level='debug', reload=True)
+    uvicorn.run(
+        'main:app',
+        host=settings.app_host,
+        port=int(settings.app_port),
+        log_level=settings.log_level,
+        reload=settings.reload
+    )

@@ -39,7 +39,7 @@ class PostgresDB:
                 user = cursor.fetchone()
         finally:
             self.pool['pool'].putconn(conn)
-        return dict(user) or None
+        return dict(user) if user else None
 
     def add_user(self, user: User) -> dict | None:
         self.create_pool()
