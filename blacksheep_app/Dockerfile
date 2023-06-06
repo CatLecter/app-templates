@@ -12,4 +12,4 @@ COPY . .
 
 RUN pip3 --no-cache-dir install -r requirements.txt
 
-CMD uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1 --log-level warning
+CMD gunicorn -w 3 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8001 main:app --log-level warning

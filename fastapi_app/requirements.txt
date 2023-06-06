@@ -1,5 +1,6 @@
-blacksheep==1.2.15
 gunicorn==20.1.0
+fastapi[all]==0.96.0
+lagom==2.4.1
 psycopg2-binary==2.9.6
 python-dotenv==1.0.0
-uvicorn==0.22.0
+uvicorn[standard]==0.22.0

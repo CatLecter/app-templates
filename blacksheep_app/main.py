@@ -10,7 +10,7 @@ from settings import settings
 app = Application()
 app.services.add_instance(PostgresDB())
 
-docs = OpenAPIHandler(info=Info(title='BlackSheep API', version='0.0.1'))
+docs = OpenAPIHandler(info=Info(title='BlackSheep', version='0.0.1'))
 docs.bind_app(app=app)
 
 if __name__ == '__main__':
