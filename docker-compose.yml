@@ -8,7 +8,7 @@ services:
     environment:
       "POSTGRES_HOST": postgres
     ports:
-      - "8001:8001"
+      - "8001:8000"
     networks:
       - net
     depends_on:
@@ -24,7 +24,7 @@ services:
     environment:
       "POSTGRES_HOST": postgres
     ports:
-      - "8002:8002"
+      - "8002:8000"
     networks:
       - net
     depends_on:

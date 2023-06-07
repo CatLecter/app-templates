@@ -1,6 +1,6 @@
 FROM python:3.11.3-bullseye
 
-EXPOSE 6000
+EXPOSE 8000
 
 WORKDIR /usr/src/app
 

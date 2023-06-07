@@ -2,80 +2,88 @@
 
 ### Here are the examples of using web frameworks that are closest to real tasks.
 
+Testing was carried out using [wrk](https://github.com/wg/wrk).
+
+Before the tests, you should run the command, first substituting the user ID instead of "user_id":
+
+```shell
+export USER_ID=user_id
+```
+
 1. [BlackSheep](https://github.com/Neoteroi/BlackSheep) is an asynchronous web framework to build event based web applications with Python.
 
    <span style="color: #FF7276" >Input:<span/>
 
    ```shell
-   wrk -d15s -t4 -c64 --latency "http://localhost:8001/user?user_id={user_id}"
+   wrk -d15s -t4 -c64 --latency "http://localhost:8001/user?user_id=${USER_ID}"
    ```
 
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8001/user?user_id=260793b4-e4b1-4237-82cc-0937c5d74380
-      4 threads and 64 connections
-      Thread Stats   Avg      Stdev     Max   +/- Stdev
-        Latency    31.21ms   17.21ms  73.64ms   46.99%
-        Req/Sec   515.10    348.17     1.96k    89.33%
-      Latency Distribution
-         50%   26.31ms
-         75%   48.39ms
-         90%   51.42ms
-         99%   62.65ms
-      30788 requests in 15.04s, 9.13MB read
-    Requests/sec:   2046.73
-    Transfer/sec:    621.61KB
+   Running 15s test @ http://localhost:8001/user?user_id=c0909032-cca6-4158-8435-aece30386960
+     4 threads and 64 connections
+     Thread Stats   Avg      Stdev     Max   +/- Stdev
+       Latency     7.84ms    3.32ms  29.09ms   52.42%
+       Req/Sec     2.06k   224.72     2.69k    66.83%
+     Latency Distribution
+        50%    7.53ms
+        75%   10.78ms
+        90%   12.06ms
+        99%   14.93ms
+     122811 requests in 15.03s, 36.89MB read
+   Requests/sec:   8171.15
+   Transfer/sec:      2.45MB
    ```
 2. [Litestar](https://github.com/litestar-org/litestar) is a powerful, performant, flexible and opinionated ASGI framework, offering first class typing support and a full Pydantic integration.
 
    <span style="color: #FF7276" >Input:<span/>
 
    ```shell
-   wrk -d15s -t4 -c64 --latency "http://localhost:8002/user/{user_id}"
+   wrk -d15s -t4 -c64 --latency "http://localhost:8002/user/${USER_ID}"
    ```
 
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8002/user/260793b4-e4b1-4237-82cc-0937c5d74380
-      4 threads and 64 connections
-      Thread Stats   Avg      Stdev     Max   +/- Stdev
-        Latency    34.16ms   20.49ms 110.65ms   59.79%
-        Req/Sec   474.17    330.49     1.34k    78.83%
-      Latency Distribution
-         50%   35.06ms
-         75%   50.22ms
-         90%   63.28ms
-         99%   78.03ms
-      28340 requests in 15.03s, 8.41MB read
-    Requests/sec:   1885.36
-    Transfer/sec:    572.61KB
+   Running 15s test @ http://localhost:8002/user/c0909032-cca6-4158-8435-aece30386960
+     4 threads and 64 connections
+     Thread Stats   Avg      Stdev     Max   +/- Stdev
+       Latency    10.81ms    4.92ms  34.32ms   48.13%
+       Req/Sec     1.49k   150.68     1.80k    66.50%
+     Latency Distribution
+        50%    9.46ms
+        75%   15.86ms
+        90%   17.44ms
+        99%   21.47ms
+     89023 requests in 15.03s, 26.74MB read
+   Requests/sec:   5921.30
+   Transfer/sec:      1.78MB
    ```
 3. [FastAPI](https://github.com/tiangolo/fastapi) is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
    
    <span style="color: #FF7276" >Input:<span/>
 
    ```shell
-   wrk -d15s -t4 -c64 --latency "http://localhost:8000/api/user/{user_id}"
+   wrk -d15s -t4 -c64 --latency "http://localhost:8000/api/user/${USER_ID}"
    ```
    
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8000/api/user/260793b4-e4b1-4237-82cc-0937c5d74380
-      4 threads and 64 connections
-      Thread Stats   Avg      Stdev     Max   +/- Stdev
-        Latency    79.14ms   19.16ms 202.00ms   82.00%
-        Req/Sec   202.45     55.85   720.00     95.67%
-      Latency Distribution
-         50%   81.30ms
-         75%   89.58ms
-         90%   97.62ms
-         99%  134.66ms
-      12109 requests in 15.06s, 3.59MB read
-    Requests/sec:    804.28
-    Transfer/sec:    244.27KB
+   Running 15s test @ http://localhost:8000/api/user/c0909032-cca6-4158-8435-aece30386960
+     4 threads and 64 connections
+     Thread Stats   Avg      Stdev     Max   +/- Stdev
+       Latency    16.65ms    8.04ms  61.11ms   58.77%
+       Req/Sec     0.97k   192.00     1.22k    69.17%
+     Latency Distribution
+        50%   17.82ms
+        75%   22.38ms
+        90%   24.87ms
+        99%   41.75ms
+     58250 requests in 15.04s, 17.50MB read
+   Requests/sec:   3872.99
+   Transfer/sec:      1.16MB
    ```
 
 ## Docs
