@@ -1,9 +1,20 @@
 from datetime import datetime
 
-from pydantic import UUID4, BaseModel
+import orjson
+from pydantic import BaseModel, UUID4
 
 
-class User(BaseModel):
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
+
+
+class FastJsonModel(BaseModel):
+    class Config:
+        json_loads = orjson.loads
+        json_dumps = orjson_dumps
+
+
+class User(FastJsonModel):
     full_name: str
     phone: str
 
