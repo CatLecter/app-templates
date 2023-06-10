@@ -10,7 +10,8 @@ Before the tests, you should run the command, first substituting the user ID ins
 export USER_ID=user_id
 ```
 
-1. [BlackSheep](https://github.com/Neoteroi/BlackSheep) is an asynchronous web framework to build event based web applications with Python.
+1. [BlackSheep](https://github.com/Neoteroi/BlackSheep) is an asynchronous web framework to build event based web
+   applications with Python.
 
    <span style="color: #FF7276" >Input:<span/>
 
@@ -35,7 +36,8 @@ export USER_ID=user_id
    Requests/sec:   8171.15
    Transfer/sec:      2.45MB
    ```
-2. [Litestar](https://github.com/litestar-org/litestar) is a powerful, performant, flexible and opinionated ASGI framework, offering first class typing support and a full Pydantic integration.
+2. [Litestar](https://github.com/litestar-org/litestar) is a powerful, performant, flexible and opinionated ASGI
+   framework, offering first class typing support and a full Pydantic integration.
 
    <span style="color: #FF7276" >Input:<span/>
 
@@ -60,33 +62,35 @@ export USER_ID=user_id
    Requests/sec:   5921.30
    Transfer/sec:      1.78MB
    ```
-3. [FastAPI](https://github.com/tiangolo/fastapi) is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
-   
+3. [FastAPI](https://github.com/tiangolo/fastapi) is a modern, fast (high-performance), web framework for building APIs
+   with Python 3.7+ based on standard Python type hints.
+
    <span style="color: #FF7276" >Input:<span/>
 
    ```shell
    wrk -d15s -t4 -c64 --latency "http://localhost:8000/api/user/${USER_ID}"
    ```
-   
+
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8000/api/user/c0909032-cca6-4158-8435-aece30386960
+   Running 15s test @ http://localhost:8000/api/user/23821d87-373f-4050-9ac2-fd4e0bc9a56e
      4 threads and 64 connections
      Thread Stats   Avg      Stdev     Max   +/- Stdev
-       Latency    16.65ms    8.04ms  61.11ms   58.77%
-       Req/Sec     0.97k   192.00     1.22k    69.17%
+       Latency    13.74ms    8.71ms  52.53ms   70.35%
+       Req/Sec     1.19k   279.66     1.69k    57.83%
      Latency Distribution
-        50%   17.82ms
-        75%   22.38ms
-        90%   24.87ms
-        99%   41.75ms
-     58250 requests in 15.04s, 17.50MB read
-   Requests/sec:   3872.99
-   Transfer/sec:      1.16MB
+        50%    9.39ms
+        75%   23.37ms
+        90%   25.26ms
+        99%   38.47ms
+     71227 requests in 15.04s, 20.79MB read
+   Requests/sec:   4735.46
+   Transfer/sec:      1.38MB
    ```
 
 ## Docs
+
 * BlackSheep: [Swagger](http://localhost:8001/docs#/)
 * Litestar: [Swagger](http://localhost:8002/schema/swagger#/), [ReDoc](http://localhost:8002/schema/redoc#/)
 * FastAPI: [Swagger](http://localhost:8000/api/openapi#/)

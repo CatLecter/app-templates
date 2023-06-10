@@ -1,10 +1,9 @@
 from datetime import datetime
 from uuid import UUID
 
-from psycopg2 import pool
-from psycopg2.extras import RealDictCursor
+import asyncpg
 
-from schemes import User
+from schemes.users import User, ResponseUser
 from settings import settings
 
 
@@ -17,85 +16,53 @@ class PostgresDB:
         self.database = settings.pg_db
         self.pool = {}
 
-    def create_pool(self, min_size: int = 1, max_size: int = 50) -> None:
+    async def create_pool(self, min_size: int = 1, max_size: int = 50) -> None:
         if self.pool.get('pool') is None:
-            self.pool['pool'] = pool.SimpleConnectionPool(
-                cursor_factory=RealDictCursor,
-                minconn=min_size,
-                maxconn=max_size,
-                user=self.user,
-                password=self.password,
+            self.pool['pool'] = await asyncpg.create_pool(
                 host=self.host,
                 port=self.port,
+                user=self.user,
+                password=self.password,
                 database=self.database,
+                min_size=min_size,
+                max_size=max_size,
             )
 
-    def get_user(self, user_id: UUID) -> dict | None:
-        self.create_pool()
-        conn = self.pool['pool'].getconn()
-        try:
-            with conn.cursor() as cursor:
-                cursor.execute('SELECT * FROM users WHERE uuid = %s', (str(user_id),))
-                user = cursor.fetchone()
-        finally:
-            self.pool['pool'].putconn(conn)
-        return dict(user) if user else None
+    async def get_user(self, user_id: UUID) -> ResponseUser | None:
+        await self.create_pool()
+        async with self.pool['pool'].acquire() as conn:
+            user = await conn.fetchrow('SELECT * FROM users WHERE uuid = $1', str(user_id))
+        return ResponseUser(**user) if user else None
 
-    def add_user(self, user: User) -> dict | None:
-        self.create_pool()
-        conn = self.pool['pool'].getconn()
-        try:
-            with conn.cursor() as cursor:
-                cursor.execute(
-                    'INSERT INTO users(full_name, phone) VALUES(%s, %s) RETURNING uuid',
-                    (
-                        user.full_name,
-                        user.phone,
-                    ),
-                )
-                uuid = cursor.fetchone()
-                uuid = uuid['uuid'] if uuid else None
-        finally:
-            conn.commit()
-            self.pool['pool'].putconn(conn)
-        return self.get_user(uuid) if uuid else None
+    async def add_user(self, user: User) -> ResponseUser | None:
+        await self.create_pool()
+        async with self.pool['pool'].acquire() as conn:
+            user_id = await conn.fetchval(
+                'INSERT INTO users(full_name, phone) VALUES($1, $2) RETURNING uuid', user.full_name, user.phone
+            )
+        return None if not user_id else await self.get_user(user_id)
 
-    def update_user(self, user: User, user_id: UUID) -> dict | None:
-        self.create_pool()
-        conn = self.pool['pool'].getconn()
-        try:
-            with conn.cursor() as cursor:
-                cursor.execute(
-                    'UPDATE users SET full_name = (%s), phone = (%s), updated_at = (%s) '
-                    'WHERE uuid = (%s) RETURNING uuid',
-                    (
-                        user.full_name,
-                        user.phone,
-                        datetime.now(),
-                        str(user_id),
-                    ),
-                )
-                uuid = cursor.fetchone()
-                uuid = uuid['uuid'] if uuid else None
-        finally:
-            conn.commit()
-            self.pool['pool'].putconn(conn)
-        return self.get_user(uuid) if uuid else None
+    async def update_user(self, user: User, user_id: UUID) -> ResponseUser | None:
+        await self.create_pool()
+        async with self.pool['pool'].acquire() as conn:
+            user_id = await conn.fetchval(
+                'UPDATE users SET full_name = $1, phone = $2, updated_at = $3 WHERE uuid = $4 RETURNING uuid',
+                user.full_name,
+                user.phone,
+                datetime.now(),
+                str(user_id),
+            )
+        return None if not user_id else await self.get_user(user_id)
 
-    def delete_user(self, user_id: UUID) -> str | None:
-        self.create_pool()
-        conn = self.pool['pool'].getconn()
-        try:
-            with conn.cursor() as cursor:
-                cursor.execute('DELETE FROM users WHERE uuid = (%s) RETURNING uuid', (str(user_id),))
-                delete_user_id = cursor.fetchone()
-                delete_user_id = delete_user_id['uuid'] if delete_user_id else None
-        finally:
-            conn.commit()
-            self.pool['pool'].putconn(conn)
-        return delete_user_id or None
+    async def delete_user(self, user_id: UUID) -> str | None:
+        await self.create_pool()
+        async with self.pool['pool'].acquire() as conn:
+            result = await conn.fetchrow('DELETE FROM users WHERE uuid = $1 RETURNING uuid', str(user_id))
+        return result['uuid'] if result else None
 
-    def close_pool(self) -> None:
+    async def close_pool(self) -> None:
         if self.pool.get('pool') is not None:
-            self.pool['pool'].closeall()
-            self.pool = {}
+            await self.pool['pool'].close()
+
+    async def __call__(self, *args, **kwargs):
+        await self.create_pool()

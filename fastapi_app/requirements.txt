@@ -1,6 +1,6 @@
+asyncpg==0.27.0
 gunicorn==20.1.0
 fastapi[all]==0.96.0
-lagom==2.4.1
-psycopg2-binary==2.9.6
+orjson==3.9.1
 python-dotenv==1.0.0
 uvicorn[standard]==0.22.0
