@@ -22,19 +22,19 @@ export USER_ID=user_id
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8001/user?user_id=c0909032-cca6-4158-8435-aece30386960
+   Running 15s test @ http://localhost:8001/user?user_id=23821d87-373f-4050-9ac2-fd4e0bc9a56e
      4 threads and 64 connections
      Thread Stats   Avg      Stdev     Max   +/- Stdev
-       Latency     7.84ms    3.32ms  29.09ms   52.42%
-       Req/Sec     2.06k   224.72     2.69k    66.83%
+       Latency     5.09ms    1.21ms  50.52ms   93.59%
+       Req/Sec     3.18k   154.40     4.07k    84.17%
      Latency Distribution
-        50%    7.53ms
-        75%   10.78ms
-        90%   12.06ms
-        99%   14.93ms
-     122811 requests in 15.03s, 36.89MB read
-   Requests/sec:   8171.15
-   Transfer/sec:      2.45MB
+        50%    5.04ms
+        75%    5.47ms
+        90%    5.79ms
+        99%    7.29ms
+     190015 requests in 15.04s, 55.45MB read
+   Requests/sec:  12636.34
+   Transfer/sec:      3.69MB
    ```
 2. [Litestar](https://github.com/litestar-org/litestar) is a powerful, performant, flexible and opinionated ASGI
    framework, offering first class typing support and a full Pydantic integration.
