@@ -89,6 +89,8 @@ export USER_ID=user_id
    Transfer/sec:      1.38MB
    ```
 
+   <img src="./diagram.png" alt="diagram" style="width: 800px; height: 600px;"/>
+
 ## Docs
 
 * BlackSheep: [Swagger](http://localhost:8001/docs#/)
