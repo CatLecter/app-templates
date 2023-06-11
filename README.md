@@ -74,22 +74,22 @@ export USER_ID=user_id
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8000/api/user/23821d87-373f-4050-9ac2-fd4e0bc9a56e
+   Running 15s test @ http://localhost:8000/api/user/ab97c816-7f0d-41de-9006-ec4803fc8e66
      4 threads and 64 connections
      Thread Stats   Avg      Stdev     Max   +/- Stdev
-       Latency    13.74ms    8.71ms  52.53ms   70.35%
-       Req/Sec     1.19k   279.66     1.69k    57.83%
+       Latency     7.24ms    6.91ms 193.37ms   99.16%
+       Req/Sec     2.34k   128.76     3.04k    91.50%
      Latency Distribution
-        50%    9.39ms
-        75%   23.37ms
-        90%   25.26ms
-        99%   38.47ms
-     71227 requests in 15.04s, 20.79MB read
-   Requests/sec:   4735.46
-   Transfer/sec:      1.38MB
+        50%    6.73ms
+        75%    7.48ms
+        90%    7.98ms
+        99%   11.10ms
+     139999 requests in 15.03s, 41.52MB read
+   Requests/sec:   9312.01
+   Transfer/sec:      2.76MB
    ```
 
-   <img src="./diagram.png" alt="diagram" style="width: 800px; height: 600px;"/>
+   <img src="./diagram.png" alt="diagram" />
 
 ## Docs
 
