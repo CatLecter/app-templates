@@ -6,10 +6,11 @@ from pydantic import UUID4
 
 from db.postgres import PostgresDB
 from schemes.users import ResponseUser, User
+from dependencies import container
 
 router = APIRouter(prefix='/user', tags=['Users'])
 
-db = PostgresDB()
+db: PostgresDB = container.resolve(PostgresDB)
 
 
 @router.get(path='/{user_id}', response_model=ResponseUser)
