@@ -17,6 +17,7 @@ class Settings:
     app_port: int = getenv('APP_PORT', 8000)
     reload: bool = getenv('RELOAD', True)
     log_level: str = getenv('LOG_LEVEL', 'debug')
+    storage_uri: str = getenv('STORAGE_URI', 'postgresql+asyncpg://user:password@localhost:5432/db')
 
 
 settings = Settings()

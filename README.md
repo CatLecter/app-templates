@@ -65,6 +65,8 @@ export USER_ID=user_id
 3. [FastAPI](https://github.com/tiangolo/fastapi) is a modern, fast (high-performance), web framework for building APIs
    with Python 3.7+ based on standard Python type hints.
 
+   #### <span style="color: #23CC20" >Using asyncpg:<span/>
+
    <span style="color: #FF7276" >Input:<span/>
 
    ```shell
@@ -74,19 +76,43 @@ export USER_ID=user_id
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8000/api/user/ab97c816-7f0d-41de-9006-ec4803fc8e66
+   Running 15s test @ http://localhost:8000/api/user/7f219465-1685-4ea6-9293-a061ff78f62b
      4 threads and 64 connections
      Thread Stats   Avg      Stdev     Max   +/- Stdev
-       Latency     7.24ms    6.91ms 193.37ms   99.16%
-       Req/Sec     2.34k   128.76     3.04k    91.50%
+       Latency     5.49ms    4.33ms 160.75ms   98.20%
+       Req/Sec     3.08k   363.87     9.56k    93.68%
      Latency Distribution
-        50%    6.73ms
-        75%    7.48ms
-        90%    7.98ms
-        99%   11.10ms
-     139999 requests in 15.03s, 41.52MB read
-   Requests/sec:   9312.01
-   Transfer/sec:      2.76MB
+        50%    5.22ms
+        75%    5.90ms
+        90%    6.35ms
+        99%   15.32ms
+     183932 requests in 15.10s, 53.50MB read
+   Requests/sec:  12181.38
+   Transfer/sec:      3.54MB
+   ```
+   #### <span style="color: #23CC20" >Using sqlalchemy[asyncio]:<span/>
+
+   <span style="color: #FF7276" >Input:<span/>
+
+   ```shell
+   wrk -d15s -t4 -c64 --latency "http://localhost:8000/api/user/orm/${USER_ID}"
+   ```
+
+   <span style="color: #FF7276" >Output:<span/>
+   ```text
+   Running 15s test @ http://localhost:8000/api/user/orm/7f219465-1685-4ea6-9293-a061ff78f62b
+     4 threads and 64 connections
+     Thread Stats   Avg      Stdev     Max   +/- Stdev
+       Latency    15.74ms    7.84ms 113.81ms   64.42%
+       Req/Sec     1.04k   192.81     1.65k    70.50%
+     Latency Distribution
+        50%   15.20ms
+        75%   20.55ms
+        90%   25.11ms
+        99%   42.05ms
+     62126 requests in 15.04s, 18.07MB read
+   Requests/sec:   4130.57
+   Transfer/sec:      1.20MB
    ```
 
    <img src="./diagram.png" alt="diagram" />

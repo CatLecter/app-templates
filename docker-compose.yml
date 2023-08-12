@@ -39,6 +39,7 @@ services:
       - ./fastapi_app/.env
     environment:
       "POSTGRES_HOST": postgres
+      "STORAGE_URI": postgresql+asyncpg://user:password@postgres:5432/db
     ports:
       - "8000:8000"
     networks:
@@ -49,7 +50,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:15.3-bullseye
+    image: postgres:15.3-bookworm
     env_file:
       - ./db/.env
     ports:
@@ -58,7 +59,7 @@ services:
       - net
     volumes:
       - postgres:/var/lib/postgresql/data
-      - ./db/sql_scripts:/docker-entrypoint-initdb.d
+      - ./db/migrations:/docker-entrypoint-initdb.d
     command:
       - "postgres"
       - "-c"
