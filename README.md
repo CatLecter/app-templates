@@ -114,7 +114,34 @@ export USER_ID=user_id
    Requests/sec:   4130.57
    Transfer/sec:      1.20MB
    ```
+4. [Django](https://github.com/django/django) is a high-level Python web framework that encourages rapid development
+   and clean, pragmatic design.
 
+   <span style="color: #FF7276" >Input:<span/>
+
+   ```shell
+   wrk -d15s -t4 -c64 --latency "http://localhost:8003/api/user/${USER_UUID}"
+   ```
+   
+   <span style="color: #FF7276" >Output:<span/>
+
+   ```text
+   Running 15s test @ http://localhost:8003/api/user/3176a565-5f6b-4903-8c58-a6694235392b
+     4 threads and 64 connections
+     Thread Stats   Avg      Stdev     Max   +/- Stdev
+       Latency    27.94ms    2.60ms  56.47ms   92.58%
+       Req/Sec   572.39     47.68   646.00     68.00%
+     Latency Distribution
+        50%   27.30ms
+        75%   28.10ms
+        90%   29.43ms
+        99%   38.89ms
+     34193 requests in 15.04s, 15.23MB read
+     Socket errors: connect 0, read 34192, write 0, timeout 0
+   Requests/sec:   2273.69
+   Transfer/sec:      1.01MB
+   ```
+   
    <img src="./diagram.png" alt="diagram" />
 
 ## Docs
@@ -122,3 +149,4 @@ export USER_ID=user_id
 * BlackSheep: [Swagger](http://localhost:8001/docs#/)
 * Litestar: [Swagger](http://localhost:8002/schema/swagger#/), [ReDoc](http://localhost:8002/schema/redoc#/)
 * FastAPI: [Swagger](http://localhost:8000/api/openapi#/)
+* Django: [Swagger](http://localhost/api/docs/#/), [Admin](http://localhost/admin/)

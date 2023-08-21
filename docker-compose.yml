@@ -48,6 +48,24 @@ services:
       postgres:
         condition: service_healthy
 
+  django:
+    container_name: django
+    build: ./django_app/
+    restart: on-failure
+    env_file:
+      - ./django_app/.env
+    environment:
+      "POSTGRES_HOST": postgres
+    ports:
+      - "8003:8000"
+    networks:
+      - net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nginx:
+        condition: service_started
+
   postgres:
     container_name: postgres
     image: postgres:15.3-bookworm
@@ -73,6 +91,19 @@ services:
       retries: 5
       start_period: 10s
     restart: unless-stopped
+
+  nginx:
+    image: nginx:1.25.2
+    container_name: nginx
+    restart: on-failure
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./django_app/static/:/static
+    networks:
+      - net
+    ports:
+      - 80:80
 
 volumes:
   postgres:
