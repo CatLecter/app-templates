@@ -2,12 +2,10 @@ from http import HTTPStatus
 from typing import Any
 
 from fastapi import HTTPException
-from sqlalchemy.exc import OperationalError
-from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
-                                    create_async_engine)
-
 from models.base import Base
 from settings import settings
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 
 class ORMEngine:

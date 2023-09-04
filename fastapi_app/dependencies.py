@@ -1,7 +1,6 @@
-from rodi import Container
-
 from engines.storage import DBEngine
 from engines.storage_with_orm import ORMEngine
+from rodi import Container
 
 container = Container()
 

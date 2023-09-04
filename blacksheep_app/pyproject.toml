@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "blacksheep-app"
+version = "0.1.0"
+description = "BlackSheep REST API Template"
+authors = ["Vasilii Safronov <vasi1988@mail.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+asyncpg = "^0.28.0"
+blacksheep = "^1.2.18"
+gunicorn = "^21.2.0"
+python-dotenv = "^1.0.0"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+pydantic = "^2.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

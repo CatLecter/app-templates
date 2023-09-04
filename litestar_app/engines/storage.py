@@ -2,12 +2,11 @@ from datetime import datetime
 from uuid import UUID
 
 import asyncpg
-
-from schemes.users import User, RespUser
+from schemes.users import ResponseUser, User
 from settings import settings
 
 
-class PostgresDB:
+class DBEngine:
     def __init__(self):
         self.host = settings.pg_host
         self.port = settings.pg_port
@@ -28,13 +27,13 @@ class PostgresDB:
                 max_size=max_size,
             )
 
-    async def get_user(self, user_id: UUID) -> RespUser | None:
+    async def get_user(self, user_id: UUID) -> ResponseUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
-            user = await conn.fetchrow('SELECT * FROM users WHERE uuid = $1', str(user_id))
-        return RespUser(**user) if user else None
+            user = await conn.fetchrow('SELECT * FROM users WHERE uuid = $1', user_id)
+        return ResponseUser(**user) if user else None
 
-    async def add_user(self, user: User) -> RespUser | None:
+    async def add_user(self, user: User) -> ResponseUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             user_id = await conn.fetchval(
@@ -42,7 +41,7 @@ class PostgresDB:
             )
         return None if not user_id else await self.get_user(user_id)
 
-    async def update_user(self, user: User, user_id: UUID) -> RespUser | None:
+    async def update_user(self, user: User, user_id: UUID) -> ResponseUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             user_id = await conn.fetchval(
@@ -50,14 +49,14 @@ class PostgresDB:
                 user.full_name,
                 user.phone,
                 datetime.now(),
-                str(user_id),
+                user_id,
             )
         return None if not user_id else await self.get_user(user_id)
 
     async def delete_user(self, user_id: UUID) -> str | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
-            result = await conn.fetchrow('DELETE FROM users WHERE uuid = $1 RETURNING uuid', str(user_id))
+            result = await conn.fetchrow('DELETE FROM users WHERE uuid = $1 RETURNING uuid', user_id)
         return result['uuid'] if result else None
 
     async def close_pool(self) -> None:

@@ -48,19 +48,19 @@ export USER_ID=user_id
    <span style="color: #FF7276" >Output:<span/>
 
    ```text
-   Running 15s test @ http://localhost:8002/user/23821d87-373f-4050-9ac2-fd4e0bc9a56e
-     4 threads and 64 connections
-     Thread Stats   Avg      Stdev     Max   +/- Stdev
-       Latency     5.54ms    2.35ms  28.54ms   68.64%
-       Req/Sec     2.92k   354.96     4.33k    71.10%
-     Latency Distribution
-        50%    5.05ms
-        75%    7.26ms
-        90%    8.89ms
-        99%   10.79ms
-     174812 requests in 15.10s, 51.01MB read
-   Requests/sec:  11576.97
-   Transfer/sec:      3.38MB
+   Running 15s test @ http://localhost:8002/user/58a18e7c-7e38-4479-919b-3b4e9c5bd099
+      4 threads and 64 connections
+      Thread Stats   Avg      Stdev     Max   +/- Stdev
+        Latency     4.50ms    1.43ms  19.92ms   79.23%
+        Req/Sec     3.60k   316.58     5.86k    73.42%
+      Latency Distribution
+         50%    3.99ms
+         75%    5.30ms
+         90%    6.43ms
+         99%    7.79ms
+      215443 requests in 15.10s, 63.08MB read
+    Requests/sec:  14267.61
+    Transfer/sec:      4.18MB
    ```
 3. [FastAPI](https://github.com/tiangolo/fastapi) is a modern, fast (high-performance), web framework for building APIs
    with Python 3.7+ based on standard Python type hints.

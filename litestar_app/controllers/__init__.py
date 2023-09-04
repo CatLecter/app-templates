@@ -1,6 +1,5 @@
-from litestar.types import ControllerRouterHandler
-
 from controllers.users import UserController
+from litestar.types import ControllerRouterHandler
 
 routes: list[ControllerRouterHandler] = [
     UserController,

@@ -1,21 +1,20 @@
-FROM python:3.11.4-bookworm
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-WORKDIR /usr/src/app
-
-EXPOSE 8000
+FROM python:3.11.5-bookworm as base
 
 RUN apt update && \
     apt upgrade -y && \
-    pip install --upgrade pip
+    pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false
+
+FROM base
+
+EXPOSE 8000
+
+WORKDIR /usr/src/app
 
 COPY . .
 
-RUN pip3 --no-cache-dir install -r requirements.txt \
-    && python manage.py spectacular --file schema.yml \
-    && python manage.py collectstatic --noinput
+RUN poetry install
 
 CMD uwsgi --http-socket 0.0.0.0:8000 \
     --plugin=python \

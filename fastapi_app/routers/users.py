@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
+from dependencies import container
+from engines.storage import DBEngine
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import UUID4
-
-from dependencies import container
-from engines.storage import DBEngine
 from schemes.users import ResponseUser, User
 from services.users import UserService
 

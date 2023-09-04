@@ -1,6 +1,5 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
-
 from api.users.serializers import UserSerializer
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from users.models import User
 
 

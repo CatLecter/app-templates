@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-
 from routers import router
 from settings import settings
 

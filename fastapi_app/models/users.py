@@ -1,9 +1,8 @@
 import uuid
 
+from models.base import Base
 from sqlalchemy import UUID, String
 from sqlalchemy.orm import Mapped, mapped_column
-
-from models.base import Base
 
 
 class User(Base):

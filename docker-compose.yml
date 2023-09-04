@@ -1,7 +1,28 @@
 services:
+  fastapi:
+    container_name: fastapi
+    build:
+      context: ./fastapi_app/
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - ./fastapi_app/.env
+    environment:
+      "POSTGRES_HOST": postgres
+      "STORAGE_URI": postgresql+asyncpg://user:password@postgres:5432/db
+    ports:
+      - "8000:8000"
+    networks:
+      - net
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   blacksheep:
     container_name: blacksheep
-    build: ./blacksheep_app/
+    build:
+      context: ./blacksheep_app/
+      dockerfile: Dockerfile
     restart: on-failure
     env_file:
       - ./blacksheep_app/.env
@@ -17,7 +38,9 @@ services:
 
   litestar:
     container_name: litestar
-    build: ./litestar_app/
+    build:
+      context: ./litestar_app/
+      dockerfile: Dockerfile
     restart: on-failure
     env_file:
       - ./litestar_app/.env
@@ -31,26 +54,11 @@ services:
       postgres:
         condition: service_healthy
 
-  fastapi:
-    container_name: fastapi
-    build: ./fastapi_app/
-    restart: on-failure
-    env_file:
-      - ./fastapi_app/.env
-    environment:
-      "POSTGRES_HOST": postgres
-      "STORAGE_URI": postgresql+asyncpg://user:password@postgres:5432/db
-    ports:
-      - "8000:8000"
-    networks:
-      - net
-    depends_on:
-      postgres:
-        condition: service_healthy
-
   django:
     container_name: django
-    build: ./django_app/
+    build:
+      context: ./django_app/
+      dockerfile: Dockerfile
     restart: on-failure
     env_file:
       - ./django_app/.env
@@ -60,6 +68,8 @@ services:
       - "8003:8000"
     networks:
       - net
+    volumes:
+      - ./django_app/static:/usr/src/app/static
     depends_on:
       postgres:
         condition: service_healthy

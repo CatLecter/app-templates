@@ -1,13 +1,12 @@
 from datetime import datetime
+from uuid import UUID
 
 import asyncpg
-from pydantic import UUID4
-
-from schemes.users import User, ResponseUser
+from schemes.users import RespUser, User
 from settings import settings
 
 
-class PostgresDB:
+class DBEngine:
     def __init__(self):
         self.host = settings.pg_host
         self.port = settings.pg_port
@@ -28,13 +27,13 @@ class PostgresDB:
                 max_size=max_size,
             )
 
-    async def get_user(self, user_id: UUID4) -> ResponseUser | None:
+    async def get_user(self, user_id: UUID) -> RespUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             user = await conn.fetchrow('SELECT * FROM users WHERE uuid = $1', user_id)
-        return ResponseUser(**user) if user else None
+        return RespUser(**user) if user else None
 
-    async def add_user(self, user: User) -> ResponseUser | None:
+    async def add_user(self, user: User) -> RespUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             user_id = await conn.fetchval(
@@ -42,7 +41,7 @@ class PostgresDB:
             )
         return None if not user_id else await self.get_user(user_id)
 
-    async def update_user(self, user: User, user_id: UUID4) -> ResponseUser | None:
+    async def update_user(self, user: User, user_id: UUID) -> RespUser | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             user_id = await conn.fetchval(
@@ -54,7 +53,7 @@ class PostgresDB:
             )
         return None if not user_id else await self.get_user(user_id)
 
-    async def delete_user(self, user_id: UUID4) -> str | None:
+    async def delete_user(self, user_id: UUID) -> str | None:
         await self.create_pool()
         async with self.pool['pool'].acquire() as conn:
             result = await conn.fetchrow('DELETE FROM users WHERE uuid = $1 RETURNING uuid', user_id)

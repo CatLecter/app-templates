@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "litestar-app"
+version = "0.1.0"
+description = "Litestar REST API Template"
+authors = ["Vasilii Safronov <vasi1988@mail.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+litestar = "^2.0.1"
+gunicorn = "^21.2.0"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+python-dotenv = "^1.0.0"
+asyncpg = "^0.28.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

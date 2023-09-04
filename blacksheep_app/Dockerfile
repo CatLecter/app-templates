@@ -1,15 +1,23 @@
-FROM python:3.11.3-bullseye
+FROM python:3.11.5-bookworm as base
+
+RUN apt update && \
+    apt upgrade -y && \
+    pip install --upgrade pip && \
+    pip install poetry && \
+    poetry config virtualenvs.create false
+
+FROM base
 
 EXPOSE 8000
 
 WORKDIR /usr/src/app
 
-RUN apt update && \
-    apt upgrade -y && \
-    pip install --upgrade pip
-
 COPY . .
 
-RUN pip3 --no-cache-dir install -r requirements.txt
+RUN poetry install
 
-CMD gunicorn -w 3 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 main:app --log-level warning
+CMD gunicorn main:app \
+    --workers 3 \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --bind 0.0.0.0:8000 \
+    --log-level warning

@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "django-app"
+version = "0.1.0"
+description = "DRF REST API Template"
+authors = ["Vasilii Safronov <vasi1988@mail.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+djangorestframework = "^3.14.0"
+drf-spectacular = "^0.26.4"
+django-multitenant = "^3.2.1"
+psycopg2-binary = "^2.9.7"
+python-dotenv = "^1.0.0"
+uwsgi = "^2.0.22"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
